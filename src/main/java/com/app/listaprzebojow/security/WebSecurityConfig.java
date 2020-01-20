@@ -49,8 +49,6 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .authorizeRequests()
                 .antMatchers("/songs/add/**").hasRole("ADMIN")
                 .antMatchers("/votes/add/**").hasRole("USER")
-                .antMatchers("/security/**").permitAll()
-                .antMatchers("/init-data").permitAll()
                 .anyRequest().authenticated()
 
                 .and()

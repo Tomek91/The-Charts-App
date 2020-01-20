@@ -5,6 +5,7 @@ import com.app.listaprzebojow.service.PreferenceService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -16,6 +17,7 @@ public class PreferenceController {
     private final PreferenceService preferenceService;
 
     @PostMapping("/add")
+    @PreAuthorize("hasRole('ROLE_USER')")
     public ResponseEntity<Long> addPreference(@RequestBody PreferenceDTO preferenceDTO) {
         return ResponseEntity
                 .status(HttpStatus.CREATED)
