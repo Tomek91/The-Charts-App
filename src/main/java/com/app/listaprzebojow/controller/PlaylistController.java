@@ -35,4 +35,11 @@ public class PlaylistController {
         return ResponseEntity.ok(playlistService.findAll());
     }
 
+    @PostMapping("/generate")
+    public ResponseEntity<PlaylistDTO> generatePlaylist(){
+        return ResponseEntity
+                .status(HttpStatus.CREATED)
+                .body(playlistService.generatePlaylist());
+    }
+
 }

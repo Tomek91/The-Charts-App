@@ -27,7 +27,7 @@ public class Song {
     @Enumerated(EnumType.STRING)
     private Genre genre;
 
-    @OneToMany(cascade = CascadeType.PERSIST, mappedBy = "song")
+    @OneToMany(cascade = CascadeType.PERSIST, mappedBy = "song", fetch = FetchType.EAGER)
     @ToString.Exclude
     @EqualsAndHashCode.Exclude
     private Set<Vote> votes;

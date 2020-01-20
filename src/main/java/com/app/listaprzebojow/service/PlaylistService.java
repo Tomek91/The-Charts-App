@@ -6,18 +6,18 @@ import com.app.listaprzebojow.dto.UserDTO;
 import com.app.listaprzebojow.exception.MyException;
 import com.app.listaprzebojow.mapper.CreateSongMapper;
 import com.app.listaprzebojow.mapper.PlaylistMapper;
-import com.app.listaprzebojow.model.Playlist;
+import com.app.listaprzebojow.model.*;
 import com.app.listaprzebojow.model.PlaylistDTO;
-import com.app.listaprzebojow.model.Song;
-import com.app.listaprzebojow.model.User;
 import com.app.listaprzebojow.model.enums.Generation;
 import com.app.listaprzebojow.repository.PlaylistRepository;
+import com.app.listaprzebojow.repository.PreferenceRepository;
 import com.app.listaprzebojow.repository.SongRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -28,7 +28,9 @@ import java.util.stream.Collectors;
 public class PlaylistService {
 
     private final PlaylistRepository playlistRepository;
+    private final PreferenceRepository preferenceRepository;
     private final AuthenticationFacade authenticationFacade;
+    private final SongService songService;
     private final PlaylistMapper playlistMapper;
 
 
@@ -72,5 +74,24 @@ public class PlaylistService {
         Playlist playlistFromDb = playlistRepository.save(playlist);
 
         return playlistMapper.playlistToPlaylistDTO(playlistFromDb);
+    }
+
+    public PlaylistDTO generatePlaylist() {
+        UserDTO loggedUser = authenticationFacade.getLoggedUser();
+
+        Preference preference = preferenceRepository
+                .findByUserId_Is(loggedUser.getId())
+                .orElseThrow(() -> new MyException("First you have to complete your preferences."));
+
+        Playlist playlistToSave = Playlist.builder()
+                .date(LocalDate.now())
+                .generation(Generation.AUTO)
+                .user(User.builder().id(loggedUser.getId()).build())
+                .songs(songService.findSongsByPreferences(preference))
+                .build();
+
+        Playlist playlistFromDb = playlistRepository.save(playlistToSave);
+        return playlistMapper.playlistToPlaylistDTO(playlistFromDb);
+
     }
 }
