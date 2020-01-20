@@ -70,6 +70,7 @@ public class VoteService {
                 .entrySet()
                 .stream()
                 .sorted(Map.Entry.comparingByValue(Comparator.reverseOrder()))
+                .limit(10)
                 .collect(Collectors.toMap(
                         e -> songMapper.songToSongDTO(e.getKey()),
                         Map.Entry::getValue,

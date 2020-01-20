@@ -1,10 +1,15 @@
 package com.app.listaprzebojow;
 
+import com.app.listaprzebojow.repository.SongRepository;
+import lombok.RequiredArgsConstructor;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-public class ListaPrzebojowApplication {
+@RequiredArgsConstructor
+public class ListaPrzebojowApplication  {
+
+    private final SongRepository songRepository;
 
     public static void main(String[] args) {
         SpringApplication.run(ListaPrzebojowApplication.class, args);
@@ -36,5 +41,4 @@ Mamy dwie mozliwosci:
 a. lista tworzona recznie czyli user najpierw tworzy pusta playliste a potem dodaje do niej utwory
 b. program generuje automatycznie liste na podstawie preferencji usera. User podaje gatunek, ulubionego wykonawce i co jeszcze wymyslisz.
    oczywiscie podaje tez ile chce miec utworow w liscie i na tej podstawie program sugerujac sie popularnoscia utworow generuje liste.
-   mozesz tez sugerowac sie tym na co glosuje user
  */
