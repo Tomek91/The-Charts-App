@@ -1,0 +1,97 @@
+package com.app.listaprzebojow.service;
+
+import com.app.listaprzebojow.authentication.AuthenticationFacade;
+import com.app.listaprzebojow.dto.SongDTO;
+import com.app.listaprzebojow.dto.UserDTO;
+import com.app.listaprzebojow.dto.VoteSongDTO;
+import com.app.listaprzebojow.exception.MyException;
+import com.app.listaprzebojow.mapper.SongMapper;
+import com.app.listaprzebojow.model.Song;
+import com.app.listaprzebojow.model.User;
+import com.app.listaprzebojow.model.Vote;
+import com.app.listaprzebojow.model.enums.Genre;
+import com.app.listaprzebojow.repository.VoteRepository;
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.time.LocalDate;
+import java.util.Comparator;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
+
+@Service
+@Transactional
+@RequiredArgsConstructor
+public class VoteService {
+
+    private final VoteRepository voteRepository;
+    private final SongMapper songMapper;
+    private final AuthenticationFacade authenticationFacade;
+
+
+    public Map<SongDTO, Long> findBest() {
+        return groupBySongs(voteRepository.findAll());
+    }
+
+    public Map<SongDTO, Long> findBestInADay(LocalDate date) {
+        if (date == null) {
+            throw new MyException("date is null");
+        }
+        LinkedHashMap<SongDTO, Long> bestSongInADay = groupBySongs(voteRepository.findAllByDate(date));
+
+        if (bestSongInADay.isEmpty()) {
+            throw new MyException("Nobody voted in a day: " + date.toString());
+        } else {
+            return bestSongInADay;
+        }
+    }
+
+    public Map<SongDTO, Long> findBestByGenre(Genre genre) {
+        if (genre == null) {
+            throw new MyException("genre is null");
+        }
+        LinkedHashMap<SongDTO, Long> bestSongInADay = groupBySongs(voteRepository.findAllByGenre(genre));
+
+
+        if (bestSongInADay.isEmpty()) {
+            throw new MyException("Nobody voted in genre songs: " + genre.toString());
+        } else {
+            return bestSongInADay;
+        }
+    }
+
+    private LinkedHashMap<SongDTO, Long> groupBySongs(List<Vote> votes) {
+        return votes
+                .stream()
+                .collect(Collectors.groupingBy(Vote::getSong, Collectors.counting()))
+                .entrySet()
+                .stream()
+                .sorted(Map.Entry.comparingByValue(Comparator.reverseOrder()))
+                .collect(Collectors.toMap(
+                        e -> songMapper.songToSongDTO(e.getKey()),
+                        Map.Entry::getValue,
+                        Long::sum,
+                        LinkedHashMap::new
+                ));
+    }
+
+    public Long addVote(VoteSongDTO voteSongDTO) {
+        if (voteSongDTO == null){
+            throw new MyException("voteSongDTO is null");
+        }
+
+        UserDTO loggedUser = authenticationFacade.getLoggedUser();
+
+        Vote voteToSave = Vote.builder()
+                .date(LocalDate.now())
+                .song(Song.builder().id(voteSongDTO.getSongId()).build())
+                .user(User.builder().id(loggedUser.getId()).build())
+                .build();
+
+        Vote voteFromDb = voteRepository.save(voteToSave);
+        return voteFromDb.getId();
+    }
+}
