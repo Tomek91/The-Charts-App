@@ -32,7 +32,8 @@ public class SongService {
         }
 
         Song songToSave = createSongMapper.songDTOToSong(createSongDTO);
-        return songToSave.getId();
+        Song songFromDb = songRepository.save(songToSave);
+        return songFromDb.getId();
     }
 
     public List<CreateSongDTO> findAll(){

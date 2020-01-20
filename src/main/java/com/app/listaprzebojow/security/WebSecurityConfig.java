@@ -49,12 +49,11 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .authorizeRequests()
                 .antMatchers("/songs/add/**").hasRole("ADMIN")
                 .antMatchers("/votes/add/**").hasRole("USER")
-                .antMatchers("/registration/**").permitAll()
+                .antMatchers("/registrations/**").permitAll()
                 .anyRequest().authenticated()
 
                 .and()
                 .exceptionHandling()
-                .accessDeniedHandler(accessDeniedHandler())
 
                 .and()
                 .addFilter(new com.app.service.security.JwtAuthenticationFilter(authenticationManager()))
