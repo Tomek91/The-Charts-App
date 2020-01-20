@@ -19,7 +19,7 @@ public class Role {
     @Column(unique = true)
     private String name;
 
-    @OneToMany(mappedBy = "role", fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "role")
     @ToString.Exclude
     @EqualsAndHashCode.Exclude
     private Set<User> users;

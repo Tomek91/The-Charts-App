@@ -41,12 +41,12 @@ public class User {
     @EqualsAndHashCode.Exclude
     private Preference preference;
 
-    @OneToMany(mappedBy = "user", fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "user")
     @ToString.Exclude
     @EqualsAndHashCode.Exclude
     private Set<Vote> votes;
 
-    @OneToMany(mappedBy = "user", fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "user")
     @ToString.Exclude
     @EqualsAndHashCode.Exclude
     private Set<Playlist> playlists;

@@ -30,7 +30,7 @@ public class Playlist {
     @Enumerated(EnumType.STRING)
     private Generation generation;
 
-    @ManyToOne(cascade = CascadeType.PERSIST, fetch = FetchType.EAGER)
+    @ManyToOne(cascade = CascadeType.PERSIST)
     @JoinColumn(name = "user_id")
     private User user;
 

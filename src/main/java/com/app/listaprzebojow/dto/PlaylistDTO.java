@@ -1,7 +1,6 @@
-package com.app.listaprzebojow.model;
+package com.app.listaprzebojow.dto;
 
 import com.app.listaprzebojow.model.enums.Generation;
-import com.app.listaprzebojow.model.enums.Genre;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -17,6 +16,6 @@ import java.util.Set;
 public class PlaylistDTO {
     private LocalDate date;
     private Generation generation;
-    private User user;
-    private Set<Song> songs;
+    private UserDataDTO userDTO;
+    private Set<SongDTO> songs;
 }

@@ -6,13 +6,13 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class PreferenceDTO {
+public class BestSongDTO {
+    private String title;
     private String contractor;
     private Genre genre;
-    private Integer number_of_songs;
+    private Long votes;
 }

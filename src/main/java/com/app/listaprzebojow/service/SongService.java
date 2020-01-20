@@ -1,7 +1,6 @@
 package com.app.listaprzebojow.service;
 
 import com.app.listaprzebojow.dto.CreateSongDTO;
-import com.app.listaprzebojow.dto.SongDTO;
 import com.app.listaprzebojow.exception.MyException;
 import com.app.listaprzebojow.mapper.CreateSongMapper;
 import com.app.listaprzebojow.model.Preference;
@@ -11,7 +10,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Collection;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Set;
@@ -26,8 +24,8 @@ public class SongService {
     private final CreateSongMapper createSongMapper;
 
 
-    public Long addSong(CreateSongDTO createSongDTO){
-        if (createSongDTO == null){
+    public Long addSong(CreateSongDTO createSongDTO) {
+        if (createSongDTO == null) {
             throw new MyException("createSongDTO is null");
         }
 
@@ -36,7 +34,7 @@ public class SongService {
         return songFromDb.getId();
     }
 
-    public List<CreateSongDTO> findAll(){
+    public List<CreateSongDTO> findAll() {
 
         return songRepository.findAll()
                 .stream()
@@ -45,7 +43,7 @@ public class SongService {
     }
 
     public Set<Song> findSongsByPreferences(Preference preference) {
-        if (preference == null){
+        if (preference == null) {
             throw new MyException("preference is null");
         }
         return songRepository.findSongsByPreferences(preference.getContractor(), preference.getGenre())

@@ -13,8 +13,8 @@ import org.springframework.web.servlet.NoHandlerFoundException;
 public class ExceptionController {
 
     @ExceptionHandler(value = {MyException.class})
-    public ResponseEntity<String> myException(Exception ex) {
-        return new ResponseEntity<>(ex.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+    public ResponseEntity<String> myException(MyException ex) {
+        return new ResponseEntity<>(ex.getMsg(), HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
     @ExceptionHandler(NoHandlerFoundException.class)
