@@ -29,6 +29,9 @@ public class User {
     @Column(nullable = false, unique = true)
     private String password;
 
+    @Column(nullable = false)
+    private Boolean active;
+
     @ManyToOne(cascade = CascadeType.PERSIST)
     @JoinColumn(name = "role_id")
     private Role role;
