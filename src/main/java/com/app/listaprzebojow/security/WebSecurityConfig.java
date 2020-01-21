@@ -39,7 +39,9 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .and()
                 .csrf().disable()
 
-                .exceptionHandling().authenticationEntryPoint(jwtAuthenticationEntryPointFilter)
+                .exceptionHandling()
+                    .authenticationEntryPoint(jwtAuthenticationEntryPointFilter)
+                    .accessDeniedHandler(accessDeniedHandler())
 
                 .and()
                 .sessionManagement()
@@ -51,9 +53,6 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/votes/add/**").hasRole("USER")
                 .antMatchers("/registrations/**").permitAll()
                 .anyRequest().authenticated()
-
-                .and()
-                .exceptionHandling()
 
                 .and()
                 .addFilter(new com.app.service.security.JwtAuthenticationFilter(authenticationManager()))
@@ -78,6 +77,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
             httpServletResponse.sendRedirect("/accessDenied");
         };
     }
+
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
 
